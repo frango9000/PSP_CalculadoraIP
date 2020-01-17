@@ -31,38 +31,46 @@ public class Cliente {
                 Scanner scanner = new Scanner(System.in);
                 int servidorDisponible = in.readInt();
                 if (servidorDisponible == 1) {
-                    String ns1 = scanner.next();
-                    String ns2 = scanner.next();
-                    String op = scanner.next();
-
-                    if (Asserts.isDouble(ns1) && Asserts.isDouble(ns2) && Asserts.isInteger(op)) {
-                        out.writeFloat(Float.parseFloat(ns1));
-                        out.writeFloat(Float.parseFloat(ns1));
-                        out.writeInt(Integer.parseInt(ns1));
+                    String ns1 = "", ns2 = "", op = "";
+                    while (!Asserts.isDouble(ns1)) {
+                        System.out.print("Introduce Num1: ");
+                        ns1 = scanner.next();
                     }
+                    while (!Asserts.isDouble(ns2)) {
+                        System.out.print("Introduce Num2: ");
+                        ns2 = scanner.next();
+                    }
+                    while (!Asserts.isInteger(op) || (Integer.parseInt(op) < 1 || Integer.parseInt(op) > 4)) {
+                        System.out.print("Introduce Operador (1 = +, 2 = -, 3 = *, 4 = /, 5 = %): ");
+                        op = scanner.next();
+                    }
+                    System.out.println("Enviando operacion: " + ns1 + " " + op + " " + ns2);
 
-                    int status = scanner.nextInt();
+                    out.writeFloat(Float.parseFloat(ns1));
+                    out.writeFloat(Float.parseFloat(ns2));
+                    out.writeInt(Integer.parseInt(op));
+
+                    int status = in.readInt();
+                    System.out.println("Status Recibido: " + status);
                     if (status == 1) {
                         float resp = in.readFloat();
                         System.out.println("Respuesta recibida : " + resp);
                     } else
                         System.out.println("Error en los datos enviados.");
-                    System.out.println("1 - Nuevo Calculo\n0 - Cerrar");
 
+                    System.out.println("1 - Nuevo Calculo\n0 - Cerrar");
                     String nloop = "";
                     while (!Asserts.isInteger(nloop) || Integer.parseInt(nloop) > 1 || Integer.parseInt(nloop) < 0) {
                         nloop = scanner.next();
                     }
+
+                    System.out.println("Enviando señal de continuar o cerrar: " + nloop);
+                    out.writeInt(Integer.parseInt(nloop));
                     if (Integer.parseInt(nloop) == 0)
                         break;
 
                 }
             }
-
-            String mensaje = "mensaje desde el cliente";
-            out.write(mensaje.getBytes());
-
-            System.out.println("Mensaje enviado");
 
             System.out.println("Cerrando el socket cliente");
 
