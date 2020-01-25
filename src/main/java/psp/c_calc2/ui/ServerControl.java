@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import psp.c_calc2.Servidor;
-import psp.z_misc.Asserts;
 
 public class ServerControl extends VBox implements ServerStatusListener {
 
@@ -72,16 +71,16 @@ public class ServerControl extends VBox implements ServerStatusListener {
 
     @FXML
     void initialize() {
-        assert txtFieldHostname != null : "fx:id=\"txtFieldHostname\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert txtFieldPort != null : "fx:id=\"txtFieldPort\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert btnBroadcastStart != null : "fx:id=\"btnBroadcastStart\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert btnBroadcastStop != null : "fx:id=\"btnBroadcastStop\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert circleBroadcastStatus != null : "fx:id=\"circleBroadcastStatus\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert btnServerStart != null : "fx:id=\"btnServerStart\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert btnServerStop != null : "fx:id=\"btnServerStop\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert circleServerStatus != null : "fx:id=\"circleServerStatus\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert txtAreaServerLog != null : "fx:id=\"txtAreaServerLog\" was not injected: check your FXML file 'ServidorPane.fxml'.";
-        assert btnExit != null : "fx:id=\"btnExit\" was not injected: check your FXML file 'ServidorPane.fxml'.";
+        assert txtFieldHostname != null : "fx:id=\"txtFieldHostname\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert txtFieldPort != null : "fx:id=\"txtFieldPort\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert btnBroadcastStart != null : "fx:id=\"btnBroadcastStart\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert btnBroadcastStop != null : "fx:id=\"btnBroadcastStop\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert circleBroadcastStatus != null : "fx:id=\"circleBroadcastStatus\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert btnServerStart != null : "fx:id=\"btnServerStart\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert btnServerStop != null : "fx:id=\"btnServerStop\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert circleServerStatus != null : "fx:id=\"circleServerStatus\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert txtAreaServerLog != null : "fx:id=\"txtAreaServerLog\" was not injected: check your FXML file 'ServerPane.fxml'.";
+        assert btnExit != null : "fx:id=\"btnExit\" was not injected: check your FXML file 'ServerPane.fxml'.";
         Servidor.getInstance().getServerStatusListeners().add(this);
         try {
             txtFieldHostname.setText(InetAddress.getLocalHost().getHostAddress());
@@ -94,15 +93,11 @@ public class ServerControl extends VBox implements ServerStatusListener {
 
     @FXML
     void btnServerStartAction(ActionEvent event) {
-        if (Asserts.isInteger(txtFieldPort.getText())) {
-            int port = Integer.parseInt(txtFieldPort.getText());
-            if (port > 1024 && port < 65536) {
-                btnServerStart.setDisable(true);
-                Servidor.getInstance().setHostname(txtFieldHostname.getText());
-                Servidor.getInstance().setPort(port);
-                Servidor.getInstance().startServer();
-            } else
-                onLogOutput("Puerto fuera de rango");
+        if (Servidor.isValidPort(txtFieldPort.getText())) {
+            btnServerStart.setDisable(true);
+            Servidor.getInstance().setHostname(txtFieldHostname.getText());
+            Servidor.getInstance().setPort(Integer.parseInt(txtFieldPort.getText()));
+            Servidor.getInstance().startServer();
         } else
             onLogOutput("Puerto invalido");
     }

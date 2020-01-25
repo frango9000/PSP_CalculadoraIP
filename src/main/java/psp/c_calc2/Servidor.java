@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import psp.c_calc2.ui.ServerStatusListener;
+import psp.z_misc.Asserts;
 
 public class Servidor {
 
@@ -36,6 +37,11 @@ public class Servidor {
     //    public final String HOSTNAME = "192.168.0.1";
     public String hostname = "192.168.1.100";
     public int port = 5555;
+
+    public static boolean isValidPort(String string) {
+        int port = -1;
+        return Asserts.isInteger(string) && (port = Integer.parseInt(string)) < 65536 && port > 1024;
+    }
 
     public String getHostname() {
         return hostname;
@@ -65,6 +71,10 @@ public class Servidor {
         return listeners;
     }
 
+    private void notifyLogChangeToListeners(String msg) {
+        listeners.forEach(serverStatusListener -> serverStatusListener.onLogOutput(msg));
+    }
+
     private void notifyServerStatusToListeners() {
         listeners.forEach(ServerStatusListener::onServerStatusChanged);
     }
@@ -73,14 +83,9 @@ public class Servidor {
         listeners.forEach(serverStatusListener -> serverStatusListener.onActiveClientsChange(activeClients));
     }
 
-    private void notifyLogChangeToListeners(String msg) {
-        listeners.forEach(serverStatusListener -> serverStatusListener.onLogOutput(msg));
-    }
-
     private void log(String msg) {
         System.out.println(msg);
         notifyLogChangeToListeners(msg);
-
     }
 
     public void startServer() {
@@ -166,7 +171,6 @@ public class Servidor {
                 notifyServerStatusToListeners();
                 log("Server Thread Terminado");
             }
-
         }
 
         private class WorkerThread implements Runnable {
@@ -189,23 +193,23 @@ public class Servidor {
                         DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
 
                         log(id + "Enviando señal preparado");
-                        out.writeBoolean(true);
+                        out.writeBoolean(true);                                         //O1
 
-                        String expresion = in.readUTF();
+                        String expresion = in.readUTF();                                   //I2
                         log(id + "Expresion recibida: " + expresion);
 
                         try {
                             double resp = Calculadora.evaluarExpresion(expresion);
                             log(id + "Enviando señal OK");
-                            out.writeBoolean(true);
+                            out.writeBoolean(true);                                     //O3a1
                             log(id + "Enviando Respuesta : " + resp);
-                            out.writeDouble(resp);
+                            out.writeDouble(resp);                                         //O3a2
                         } catch (Exception e) {
                             log(id + "No se pueden procesar los datos recibidos");
-                            out.writeBoolean(false);
+                            out.writeBoolean(false);                                    //O3b
                         }
                         log(id + "Esperando orden de continuar o cerrar.");
-                        boolean repeat = in.readBoolean();
+                        boolean repeat = in.readBoolean();                                 //I4
                         if (!repeat)
                             break;
                     }

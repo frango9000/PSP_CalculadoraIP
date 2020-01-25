@@ -5,10 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
-import psp.z_misc.Asserts;
+import psp.c_calc2.ui.ClientStatusListener;
 
 public class Cliente extends Thread {
 
@@ -47,10 +48,25 @@ public class Cliente extends Thread {
         this.serverPort = serverPort;
     }
 
+    private List<ClientStatusListener> listeners = new ArrayList<>();
+
+    public List<ClientStatusListener> getClientStatusListeners() {
+        return listeners;
+    }
+
+    private void notifyLogChangeToListeners(String msg) {
+        listeners.forEach(serverStatusListener -> serverStatusListener.onLogOutput(msg));
+    }
+
     private ClienteThread clienteThread;
 
     public ClienteThread getClienteThread() {
         return clienteThread;
+    }
+
+    private void log(String msg) {
+        System.out.println(msg);
+        notifyLogChangeToListeners(msg);
     }
 
     public FutureTask<Boolean> connect() {
@@ -66,10 +82,7 @@ public class Cliente extends Thread {
         });
     }
 
-    public class ClienteThread extends Thread {
-
-        private boolean calcRepeat = true;
-        Scanner scanner = new Scanner(System.in);
+    private class ClienteThread extends Thread {
 
         private AtomicBoolean connected = new AtomicBoolean(false);
 
@@ -94,26 +107,21 @@ public class Cliente extends Thread {
                 DataInputStream in = new DataInputStream(clienteSocket.getInputStream());
                 DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
 
-                while (calcRepeat) {
-                    boolean preparado = in.readBoolean();
+                while (true) {
+                    boolean preparado = in.readBoolean();                               //I1
                     if (preparado) {
                         System.out.print("Introduce la expresion a calcular: ");
                         String expresion = getExpresion();
-                        out.writeUTF(expresion);
+                        out.writeUTF(expresion);                                        //O2
 
-                        boolean validacion = in.readBoolean();
+                        boolean validacion = in.readBoolean();                          //I3a1
                         log("Status Recibido: " + validacion);
                         if (validacion) {
-                            double resp = in.readDouble();
+                            double resp = in.readDouble();                              //I3a2
                             log("Respuesta recibida : " + resp);
-                        } else
+                        } else                                                          //I3b
                             log("Error en los datos enviados.");
-
-                        log("1 - Nuevo Calculo\n0 - Cerrar");
-                        String nloop = scanner.nextLine();
-                        calcRepeat = Asserts.isInteger(nloop) && Integer.parseInt(nloop) == 1;
-                        log("Enviando señal de continuar o cerrar: " + calcRepeat);
-                        out.writeBoolean(calcRepeat);
+                        out.writeBoolean(true);                                      //O4
                     }
                 }
 
@@ -133,12 +141,8 @@ public class Cliente extends Thread {
         }
 
         private String getExpresion() {
-            return scanner.nextLine();
+            return "2*2";
         }
 
-    }
-
-    private void log(String message) {
-        log(message);
     }
 }
