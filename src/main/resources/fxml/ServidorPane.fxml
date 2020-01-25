@@ -19,20 +19,20 @@
     <HBox alignment="CENTER_RIGHT" disable="true" layoutX="10.0" layoutY="55.0" spacing="10.0">
       <children>
         <Label text="Broadcast" />
-        <Button fx:id="btnBroadcastStart" disable="true" mnemonicParsing="false" onAction="#btnBroadcastStartAction" text="Start" HBox.hgrow="ALWAYS" />
-        <Button fx:id="btnBroadcastStop" mnemonicParsing="false" onAction="#btnBroadcastStopAction" text="Stop" />
-        <Circle fill="#838383" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+        <Button fx:id="btnBroadcastStart" disable="true" minWidth="50.0" mnemonicParsing="false" onAction="#btnBroadcastStartAction" prefWidth="50.0" text="Start" HBox.hgrow="ALWAYS" />
+        <Button fx:id="btnBroadcastStop" minWidth="50.0" mnemonicParsing="false" onAction="#btnBroadcastStopAction" prefWidth="50.0" text="Stop" />
+        <Circle fx:id="circleBroadcastStatus" fill="#838383" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
       </children>
     </HBox>
     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="10.0">
       <children>
         <Label text="Servidor" />
-        <Button fx:id="btnServerStart" mnemonicParsing="false" onAction="#btnServerStartAction" text="Start" HBox.hgrow="ALWAYS" />
-        <Button fx:id="btnServerStop" layoutX="102.0" layoutY="20.0" mnemonicParsing="false" onAction="#btnServerStopAction" text="Stop" />
-        <Circle fill="#ff1f1f" radius="10.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER" />
+        <Button fx:id="btnServerStart" minWidth="50.0" mnemonicParsing="false" onAction="#btnServerStartAction" prefWidth="50.0" text="Start" HBox.hgrow="ALWAYS" />
+        <Button fx:id="btnServerStop" layoutX="102.0" layoutY="20.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnServerStopAction" prefWidth="50.0" text="Stop" />
+        <Circle fx:id="circleServerStatus" fill="#ff1f1f" radius="10.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER" />
       </children>
     </HBox>
-    <TextArea fx:id="txtAreaServerLog" prefHeight="200.0" prefWidth="200.0" />
+    <TextArea fx:id="txtAreaServerLog" editable="false" prefHeight="200.0" prefWidth="300.0" />
     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="55.0" spacing="10.0">
       <children>
         <Button fx:id="btnExit" alignment="CENTER" mnemonicParsing="false" onAction="#btnExitAction" text="Cerrar" HBox.hgrow="ALWAYS" />

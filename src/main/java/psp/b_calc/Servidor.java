@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Servidor {
 
-    public static final String IP = "192.168.0.1";
+    public static final String IP = "192.168.1.100";
     public static final int PORT = 5555;
 
 
