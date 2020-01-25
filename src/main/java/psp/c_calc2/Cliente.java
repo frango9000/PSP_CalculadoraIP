@@ -10,7 +10,7 @@ import psp.z_misc.Asserts;
 
 public class Cliente {
 
-    public static final String SERV_IP = "192.168.0.1";
+    public static final String SERV_IP = "localhost";
     public static final int SERV_PORT = 5555;
 
 

@@ -23,7 +23,7 @@ public class Servidor {
 
             System.out.println("Realizando el bind");
 
-            InetSocketAddress addr = new InetSocketAddress(IP, PORT);
+            InetSocketAddress addr = new InetSocketAddress(PORT);
             serverSocket.bind(addr);
 
             System.out.println("Aceptando conexiones");
