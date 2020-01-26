@@ -3,8 +3,10 @@ package psp.c_calc2;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -91,25 +93,26 @@ public class Cliente extends Thread {
 //    }
 
     public void connect() {
-        disconnect();
         clienteThread = new ClienteThread();
         clienteThread.start();
     }
 
     public void disconnect() {
-        if (clienteThread != null) {
-            if (clienteThread.clienteSocket != null) {
-                try {
-                    clienteThread.clienteSocket.setSoTimeout(0);
-                    clienteThread.clienteSocket.close();
-                    clienteThread.clienteSocket = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (isConnected()) {
+            try {
+                clienteThread.clienteSocket.setSoTimeout(0);
+                clienteThread.clienteSocket.close();
+                clienteThread.clienteSocket = null;
+            } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            clienteThread.interrupt();
-            clienteThread = null;
         }
+        if (clienteThread != null)
+            clienteThread.interrupt();
+        clienteThread = null;
+
     }
 
     public boolean setExpression(String expression) {
@@ -147,13 +150,12 @@ public class Cliente extends Thread {
             DataInputStream in = null;
             DataOutputStream out = null;
             try {
-                log("Creando socket cliente");
                 clienteSocket = new Socket();
-                log("Estableciendo la conexion");
 
                 InetSocketAddress addr = new InetSocketAddress(serverHostname, serverPort);
+                log("Conectando: " + addr.getAddress());
                 clienteSocket.connect(addr);
-                log("Conectado");
+                log("Conectado: " + addr.getAddress());
                 notifyClientStatusToListeners();
                 in  = new DataInputStream(clienteSocket.getInputStream());
                 out = new DataOutputStream(clienteSocket.getOutputStream());
@@ -178,13 +180,14 @@ public class Cliente extends Thread {
                     }
                 }
 
+            } catch (ConnectException ce) {
+                log("Host no responde");
             } catch (IOException e) {
                 e.printStackTrace();
                 log("Error");
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ie) {
                 log("Cliente Interrumpido");
             } finally {
-                log("Cerrando el socket cliente");
                 try {
                     if (in != null)
                         in.close();
@@ -196,7 +199,7 @@ public class Cliente extends Thread {
                     e.printStackTrace();
                 }
                 notifyClientStatusToListeners();
-                log("Terminando hilo cliente");
+                log("Cliente terminado");
             }
         }
     }

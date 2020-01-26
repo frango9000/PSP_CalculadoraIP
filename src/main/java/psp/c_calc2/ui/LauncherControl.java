@@ -28,8 +28,6 @@ public class LauncherControl extends VBox {
 
     @FXML
     void initialize() {
-        assert btnServidor != null : "fx:id=\"btnServidor\" was not injected: check your FXML file 'LauncherPane.fxml'.";
-        assert btnCliente != null : "fx:id=\"btnCliente\" was not injected: check your FXML file 'LauncherPane.fxml'.";
 
     }
 

@@ -1,6 +1,7 @@
 package psp.c_calc2.ui;
 
 import java.io.IOException;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -16,6 +17,11 @@ public class MainUI extends FxApplication {
     @Override
     public void start(Stage primaryStage) {
         setMainStage(primaryStage);
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
 //        mainStage.setMinWidth(600);
 //        mainStage.setMinHeight(400);
         try {

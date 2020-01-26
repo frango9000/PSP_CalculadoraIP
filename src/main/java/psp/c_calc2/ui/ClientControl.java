@@ -61,17 +61,6 @@ public class ClientControl extends Pane implements IClientStatusListener {
     @FXML
     void initialize() {
         loadClientPane("/fxml/CalculadoraPane.fxml");
-        assert tabPane != null : "fx:id=\"tabPane\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert tabConnect != null : "fx:id=\"tabConnect\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert txtFieldPort != null : "fx:id=\"txtFieldPort\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert txtFieldIP != null : "fx:id=\"txtFieldIP\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert btnConnect != null : "fx:id=\"btnConnect\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert circleClientStatus != null : "fx:id=\"circleClientStatus\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert btnDisconnect != null : "fx:id=\"btnDisconnect\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert txtAreaClientLog != null : "fx:id=\"txtAreaClientLog\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert btnExit != null : "fx:id=\"btnExit\" was not injected: check your FXML file 'ClientPane.fxml'.";
-        assert tabClient != null : "fx:id=\"tabClient\" was not injected: check your FXML file 'ClientPane.fxml'.";
-
         Cliente.getInstance().getClientStatusListeners().add(this);
         txtFieldIP.setText(Servidor.DEFAULT_HOSTNAME);
         txtFieldPort.setText(Servidor.DEFAULT_PORT + "");
@@ -94,7 +83,6 @@ public class ClientControl extends Pane implements IClientStatusListener {
             Cliente.getInstance().setServerHostname(txtFieldIP.getText());
             Cliente.getInstance().setServerPort(Integer.parseInt(txtFieldPort.getText()));
             Cliente.getInstance().connect();
-
         } else
             onLogOutput("Puerto invalido");
     }
@@ -102,11 +90,11 @@ public class ClientControl extends Pane implements IClientStatusListener {
     @FXML
     void btnDisconnectAction(ActionEvent event) {
         Cliente.getInstance().disconnect();
-
     }
 
     @FXML
     void btnExitAction(ActionEvent event) {
+        Platform.exit();
         System.exit(0);
     }
 
@@ -129,7 +117,14 @@ public class ClientControl extends Pane implements IClientStatusListener {
 
     @Override
     public void onResultReceived(String expression, boolean valid, double result) {
-        Platform.runLater(() -> calculadoraControl.txtAreaClienteLog.appendText(expression + "\n" + (valid ? result : "ERROR") + "\n"));
+        Platform.runLater(() -> {
+            calculadoraControl.txtAreaClienteLog.appendText(expression + "\n" + (valid ? result : "ERROR") + "\n");
+            if (valid)
+                calculadoraControl.txtFieldInput.setText(result + "");
+        });
 
     }
+
+
+
 }

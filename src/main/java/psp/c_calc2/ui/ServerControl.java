@@ -66,21 +66,12 @@ public class ServerControl extends VBox implements IServerStatusListener {
 
     @FXML
     void btnExitAction(ActionEvent event) {
-
+        Platform.exit();
+        System.exit(0);
     }
 
     @FXML
     void initialize() {
-        assert txtFieldHostname != null : "fx:id=\"txtFieldHostname\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert txtFieldPort != null : "fx:id=\"txtFieldPort\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert btnBroadcastStart != null : "fx:id=\"btnBroadcastStart\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert btnBroadcastStop != null : "fx:id=\"btnBroadcastStop\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert circleBroadcastStatus != null : "fx:id=\"circleBroadcastStatus\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert btnServerStart != null : "fx:id=\"btnServerStart\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert btnServerStop != null : "fx:id=\"btnServerStop\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert circleServerStatus != null : "fx:id=\"circleServerStatus\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert txtAreaServerLog != null : "fx:id=\"txtAreaServerLog\" was not injected: check your FXML file 'ServerPane.fxml'.";
-        assert btnExit != null : "fx:id=\"btnExit\" was not injected: check your FXML file 'ServerPane.fxml'.";
         Servidor.getInstance().getServerStatusListeners().add(this);
         try {
             txtFieldHostname.setText(InetAddress.getLocalHost().getHostAddress());
