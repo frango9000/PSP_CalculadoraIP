@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import psp.c_calc2.ui.ServerStatusListener;
+import psp.c_calc2.ui.IServerStatusListener;
 import psp.z_misc.Asserts;
 
 public class Servidor {
@@ -68,22 +68,22 @@ public class Servidor {
         return serverThread;
     }
 
-    private List<ServerStatusListener> listeners = new ArrayList<>();
+    private List<IServerStatusListener> listeners = new ArrayList<>();
 
-    public List<ServerStatusListener> getServerStatusListeners() {
+    public List<IServerStatusListener> getServerStatusListeners() {
         return listeners;
     }
 
     private void notifyLogChangeToListeners(String msg) {
-        listeners.forEach(serverStatusListener -> serverStatusListener.onLogOutput(msg));
+        listeners.forEach(IServerStatusListener -> IServerStatusListener.onLogOutput(msg));
     }
 
     private void notifyServerStatusToListeners() {
-        listeners.forEach(ServerStatusListener::onServerStatusChanged);
+        listeners.forEach(IServerStatusListener::onStatusChanged);
     }
 
     private void notifyActiveClientsToListeners(int activeClients) {
-        listeners.forEach(serverStatusListener -> serverStatusListener.onActiveClientsChange(activeClients));
+        listeners.forEach(IServerStatusListener -> IServerStatusListener.onActiveClientsChange(activeClients));
     }
 
     private void log(String msg) {
@@ -226,7 +226,7 @@ public class Servidor {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    notifyActiveClientsToListeners(activeClients--);
+                    notifyActiveClientsToListeners(--activeClients);
                 }
             }
         }

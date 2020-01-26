@@ -10,7 +10,10 @@ import javafx.stage.Stage;
 
 public class FXMLStage extends Stage {
 
-    public FXMLStage(String title) {
+    private FXMLLoader fxmlLoader = new FXMLLoader();
+
+
+    private FXMLStage(String title) {
         setTitle(title);
         initModality(Modality.NONE);
         initOwner(FxApplication.getMainStage());
@@ -19,8 +22,8 @@ public class FXMLStage extends Stage {
     public FXMLStage(String fxml, String title) {
         this(title);
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-
+            fxmlLoader.setLocation(getClass().getResource(fxml));
+            Parent root = fxmlLoader.load();
             setScene(new Scene(root));
             root.requestFocus();
         } catch (IOException e) {
@@ -28,11 +31,19 @@ public class FXMLStage extends Stage {
         }
     }
 
-    public FXMLStage(Pane root, String title) {
-        this(title);
-        setScene(new Scene(root));
-        root.requestFocus();
+    public FXMLLoader getFxmlLoader() {
+        return fxmlLoader;
     }
 
+    public Pane getRootPane() {
+        return (Pane) getActiveScene().getRoot();
+    }
 
+    public Scene getActiveScene() {
+        return this.getScene();
+    }
+
+    public <T> T getController() {
+        return fxmlLoader.getController();
+    }
 }

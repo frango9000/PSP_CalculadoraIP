@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import psp.c_calc2.Servidor;
 
-public class ServerControl extends VBox implements ServerStatusListener {
+public class ServerControl extends VBox implements IServerStatusListener {
 
     @FXML
     private ResourceBundle resources;
@@ -110,22 +110,21 @@ public class ServerControl extends VBox implements ServerStatusListener {
 
 
     @Override
-    public synchronized void onServerStatusChanged() {
-        Platform.runLater(() -> {
-            if (Servidor.getInstance().isServerAlive()) {
-                circleServerStatus.setFill(Color.LIMEGREEN);
-                btnServerStart.setDisable(true);
-            } else {
-                circleServerStatus.setFill(Color.ORANGERED);
-                btnServerStart.setDisable(false);
-                btnServerStart.setText("Start");
-            }
-        });
+    public void onStatusChanged() {
+        if (Servidor.getInstance().isServerAlive()) {
+            circleServerStatus.setFill(Color.LIMEGREEN);
+            btnServerStart.setDisable(true);
+        } else {
+            circleServerStatus.setFill(Color.ORANGERED);
+            btnServerStart.setDisable(false);
+            btnServerStart.setText("Start");
+        }
     }
 
     @Override
     public void onActiveClientsChange(int activeClients) {
-        btnServerStart.setText(Integer.toString(activeClients));
+        Platform.runLater(() -> btnServerStart.setText(Integer.toString(activeClients)));
+
     }
 
     @Override
