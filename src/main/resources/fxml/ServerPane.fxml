@@ -32,7 +32,7 @@
         <Circle fx:id="circleServerStatus" fill="#ff1f1f" radius="10.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER" />
       </children>
     </HBox>
-    <TextArea fx:id="txtAreaServerLog" editable="false" prefHeight="200.0" prefWidth="300.0" />
+    <TextArea fx:id="txtAreaServerLog" prefHeight="200.0" prefWidth="300.0" />
     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="55.0" spacing="10.0">
       <children>
         <Button fx:id="btnExit" alignment="CENTER" mnemonicParsing="false" onAction="#btnExitAction" text="Cerrar" HBox.hgrow="ALWAYS" />

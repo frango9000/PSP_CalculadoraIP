@@ -12,7 +12,7 @@ public class FXMLStage extends Stage {
 
     public FXMLStage(String title) {
         setTitle(title);
-        initModality(Modality.WINDOW_MODAL);
+        initModality(Modality.NONE);
         initOwner(FxApplication.getMainStage());
     }
 

@@ -18,6 +18,10 @@ import psp.z_misc.Asserts;
 
 public class Servidor {
 
+    public static final String DEFAULT_HOSTNAME = "192.168.1.100";
+    //    private static String DEFAULT_HOSTNAME = "192.168.0.1";
+    public static final int DEFAULT_PORT = 5555;
+
     private static Servidor instance;
 
     private Servidor() {
@@ -34,9 +38,8 @@ public class Servidor {
         return instance;
     }
 
-    //    public final String HOSTNAME = "192.168.0.1";
-    public String hostname = "192.168.1.100";
-    public int port = 5555;
+    private String hostname = DEFAULT_HOSTNAME;
+    private int port = DEFAULT_PORT;
 
     public static boolean isValidPort(String string) {
         int port = -1;

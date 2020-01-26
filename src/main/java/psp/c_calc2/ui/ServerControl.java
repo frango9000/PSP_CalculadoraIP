@@ -86,8 +86,9 @@ public class ServerControl extends VBox implements ServerStatusListener {
             txtFieldHostname.setText(InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
             onLogOutput("Cant find default localhost IP");
+            txtFieldHostname.setText(Servidor.DEFAULT_HOSTNAME);
         }
-        txtFieldPort.setText("5555");
+        txtFieldPort.setText(Servidor.DEFAULT_PORT + "");
 
     }
 

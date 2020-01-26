@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import psp.c_calc2.ui.ClientStatusListener;
@@ -29,8 +30,8 @@ public class Cliente extends Thread {
         return instance;
     }
 
-    public String serverHostname = "localhost";
-    public int serverPort = 5555;
+    private String serverHostname = Servidor.DEFAULT_HOSTNAME;
+    private int serverPort = Servidor.DEFAULT_PORT;
 
     public String getServerHostname() {
         return serverHostname;
@@ -141,7 +142,7 @@ public class Cliente extends Thread {
         }
 
         private String getExpresion() {
-            return "2*2";
+            return new Scanner(System.in).nextLine();
         }
 
     }
