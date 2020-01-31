@@ -116,8 +116,10 @@ public class Servidor {
 
     private class ServerThread extends Thread {
 
-        private int cores = Runtime.getRuntime().availableProcessors();
-        private ExecutorService pool = Executors.newFixedThreadPool(cores);
+        //        private int maxActiveClients = Runtime.getRuntime().availableProcessors();
+        private int maxActiveClients = 4;
+
+        private ExecutorService pool = Executors.newFixedThreadPool(maxActiveClients);
         private int activeClients = 0;
 
         private ServerSocket serverSocket = null;
@@ -131,7 +133,8 @@ public class Servidor {
         @Override
         public void run() {
             try {
-                log("Creando socket servidor calculadora");
+
+                log("Creando socket servidor calculadora. Clientes Max: " + maxActiveClients);
 
                 serverSocket = new ServerSocket();
 
@@ -145,6 +148,7 @@ public class Servidor {
 
                 serverSocket.bind(inetSocketAddress);
                 notifyServerStatusToListeners();
+                notifyActiveClientsToListeners(activeClients);
 
                 log("Aceptando conexiones: " + serverSocket.getLocalSocketAddress().toString());
 

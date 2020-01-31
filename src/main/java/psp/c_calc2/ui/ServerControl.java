@@ -86,7 +86,6 @@ public class ServerControl extends VBox implements IServerStatusListener {
     @FXML
     void btnServerStartAction(ActionEvent event) {
         if (Servidor.isValidPort(txtFieldPort.getText())) {
-            btnServerStart.setDisable(true);
             Servidor.getInstance().setHostname(txtFieldHostname.getText());
             Servidor.getInstance().setPort(Integer.parseInt(txtFieldPort.getText()));
             Servidor.getInstance().startServer();
@@ -103,12 +102,16 @@ public class ServerControl extends VBox implements IServerStatusListener {
     @Override
     public void onStatusChanged() {
         if (Servidor.getInstance().isServerAlive()) {
-            circleServerStatus.setFill(Color.LIMEGREEN);
-            btnServerStart.setDisable(true);
+            Platform.runLater(() -> {
+                circleServerStatus.setFill(Color.LIMEGREEN);
+                btnServerStart.setDisable(true);
+            });
         } else {
-            circleServerStatus.setFill(Color.ORANGERED);
-            btnServerStart.setDisable(false);
-            btnServerStart.setText("Start");
+            Platform.runLater(() -> {
+                circleServerStatus.setFill(Color.ORANGERED);
+                btnServerStart.setText("Start");
+                btnServerStart.setDisable(false);
+            });
         }
     }
 
