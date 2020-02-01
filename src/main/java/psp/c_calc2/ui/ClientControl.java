@@ -122,9 +122,14 @@ public class ClientControl extends TabPane implements IClientStatusListener {
     @Override
     public void onResultReceived(String expression, boolean valid, double result) {
         Platform.runLater(() -> {
-            calculadoraControl.txtAreaClienteLog.appendText(expression + "\n" + (valid ? result : "ERROR") + "\n");
+            String resultString = Double.toString(result);
+            while (resultString.endsWith(".") || resultString.endsWith("0")) {
+                resultString = resultString.substring(0, resultString.length() - 1);
+            }
+            calculadoraControl.txtAreaClienteLog.appendText(expression + "=\n" + (valid ? resultString : "ERROR") + "\n");
             if (valid)
-                calculadoraControl.txtFieldInput.setText(result + "");
+                calculadoraControl.txtFieldInput.setText(resultString + "");
+            calculadoraControl.txtFieldInput.positionCaret(calculadoraControl.txtFieldInput.getText().length());
         });
     }
 }
