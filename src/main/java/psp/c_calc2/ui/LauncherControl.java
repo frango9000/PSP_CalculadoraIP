@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import psp.z_misc.fx.FxApplication;
 
@@ -34,7 +34,7 @@ public class LauncherControl extends VBox {
     @FXML
     void btnClienteAction(ActionEvent event) {
         try {
-            Pane root = FXMLLoader.load(getClass().getResource("/fxml/ClientPane.fxml"));
+            TabPane root = FXMLLoader.load(getClass().getResource("/fxml/ClientPane.fxml"));
             FxApplication.getMainStage().setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class LauncherControl extends VBox {
     @FXML
     void btnServidorAction(ActionEvent event) {
         try {
-            Pane root = FXMLLoader.load(getClass().getResource("/fxml/ServerPane.fxml"));
+            VBox root = FXMLLoader.load(getClass().getResource("/fxml/ServerPane.fxml"));
             FxApplication.getMainStage().setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();

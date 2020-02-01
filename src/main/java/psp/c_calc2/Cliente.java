@@ -100,7 +100,8 @@ public class Cliente extends Thread {
     public void disconnect() {
         if (isConnected()) {
             try {
-                clienteThread.clienteSocket.setSoTimeout(0);
+                clienteThread.in.close();
+                clienteThread.out.close();
                 clienteThread.clienteSocket.close();
                 clienteThread.clienteSocket = null;
             } catch (SocketException e) {
@@ -118,7 +119,7 @@ public class Cliente extends Thread {
     public boolean setExpression(String expression) {
         if (isConnected()) {
             try {
-                clienteThread.blockingQueue.put(expression);
+                clienteThread.putExpression(expression);
                 return true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -130,7 +131,7 @@ public class Cliente extends Thread {
 
 
     public boolean isConnected() {
-        return clienteThread != null && clienteThread.clienteSocket != null && clienteThread.clienteSocket.isConnected();
+        return clienteThread != null && clienteThread.clienteSocket != null && clienteThread.clienteSocket.isBound();
     }
 
 
@@ -138,19 +139,27 @@ public class Cliente extends Thread {
 
         private Socket clienteSocket = null;
 
+        DataInputStream in = null;
+        DataOutputStream out = null;
 
-        private Object lock = new Object();
 
-        private BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(10);
+        private BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(1);
+
+        public void putExpression(String expression) throws InterruptedException {
+            blockingQueue.put(expression);
+        }
+
+        public String takeExpression() throws InterruptedException {
+            return blockingQueue.take();
+        }
 
 
         @Override
         public void run() {
-
-            DataInputStream in = null;
-            DataOutputStream out = null;
             try {
                 clienteSocket = new Socket();
+                clienteSocket.setSoTimeout(10000);
+                clienteSocket.setKeepAlive(true);
 
                 InetSocketAddress addr = new InetSocketAddress(serverHostname, serverPort);
                 log("Conectando: " + addr.getAddress());
@@ -163,11 +172,13 @@ public class Cliente extends Thread {
                 while (true) {
                     boolean preparado = in.readBoolean();                               //I1
                     if (preparado) {
-                        log("Cliente preparado.");
-                        String expression = blockingQueue.take();
-                        log("Esperando peticion.");
+                        log("Servidor preparado. Esperando peticion del usuario");
+                        String expression = takeExpression(); //TODO: Heartbeat
+//                        while (expression == null) {
+//                            expression = blockingQueue.poll(1, TimeUnit.SECONDS);
+//                        }
                         out.writeUTF(expression);                                       //O2
-                        log("Peticion enviada, esperando respuesta.");
+                        log("Peticion [" + expression + "] enviada, esperando respuesta.");
                         boolean valid = in.readBoolean();                               //I3a1
                         log("Peticion valida ? " + valid);
                         double result = 0;
@@ -179,27 +190,34 @@ public class Cliente extends Thread {
                         out.writeBoolean(true);                                      //O4
                     }
                 }
-
             } catch (ConnectException ce) {
                 log("Host no responde");
+            } catch (SocketException se) {
+                log("Interrumpiendo Bind");
             } catch (IOException e) {
                 e.printStackTrace();
                 log("Error");
             } catch (InterruptedException ie) {
                 log("Cliente Interrumpido");
             } finally {
-                try {
-                    if (in != null)
-                        in.close();
-                    if (out != null)
-                        out.close();
-                    if (clienteSocket != null)
-                        clienteSocket.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                notifyClientStatusToListeners();
+                killClientThread();
+            }
+        }
+
+        public void killClientThread() {
+            try {
+                if (in != null)
+                    in.close();
+                if (out != null)
+                    out.close();
+                if (clienteSocket != null)
+                    clienteSocket.close();
+            } catch (Exception e) {
+//                    e.printStackTrace();
+                log("Uncaught Exception 0001");
+            } finally {
                 log("Cliente terminado");
+                notifyClientStatusToListeners();
             }
         }
     }

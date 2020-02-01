@@ -12,13 +12,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import psp.c_calc2.Cliente;
 import psp.c_calc2.Servidor;
 
-public class ClientControl extends Pane implements IClientStatusListener {
+public class ClientControl extends TabPane implements IClientStatusListener {
 
     @FXML
     private ResourceBundle resources;
@@ -101,19 +100,24 @@ public class ClientControl extends Pane implements IClientStatusListener {
     @Override
     public void onStatusChanged() {
         if (Cliente.getInstance().isConnected()) {
-            circleClientStatus.setFill(Color.LIMEGREEN);
-            btnConnect.setDisable(true);
+            Platform.runLater(() -> {
+                circleClientStatus.setFill(Color.LIMEGREEN);
+                calculadoraControl.circleClientStatus.setFill(Color.LIMEGREEN);
+                btnConnect.setDisable(true);
+            });
         } else {
-            circleClientStatus.setFill(Color.ORANGERED);
-            btnConnect.setDisable(false);
+            Platform.runLater(() -> {
+                circleClientStatus.setFill(Color.ORANGERED);
+                calculadoraControl.circleClientStatus.setFill(Color.ORANGERED);
+                btnConnect.setDisable(false);
+            });
         }
     }
 
     @Override
     public void onLogOutput(String string) {
-        txtAreaClientLog.appendText(string + "\n");
+        Platform.runLater(() -> txtAreaClientLog.appendText(string + "\n"));
     }
-
 
     @Override
     public void onResultReceived(String expression, boolean valid, double result) {
@@ -122,9 +126,5 @@ public class ClientControl extends Pane implements IClientStatusListener {
             if (valid)
                 calculadoraControl.txtFieldInput.setText(result + "");
         });
-
     }
-
-
-
 }

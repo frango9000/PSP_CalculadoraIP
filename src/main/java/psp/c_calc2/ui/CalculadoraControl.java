@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import psp.c_calc2.Cliente;
 
 public class CalculadoraControl extends VBox {
@@ -85,106 +86,27 @@ public class CalculadoraControl extends VBox {
     @FXML
     private Button btnExit;
 
-    ClientControl clientControl;
+    @FXML
+    protected Circle circleClientStatus;
 
-    public void setClientControl(ClientControl clientControl) {
-        this.clientControl = clientControl;
-    }
-
-    private void appendToInputText(char append) {
-        txtFieldInput.setText(txtFieldInput.getText() + append);
-    }
 
     @FXML
-    void btn0Action(ActionEvent event) {
-        appendToInputText('0');
-    }
-
-    @FXML
-    void btn1Action(ActionEvent event) {
-        appendToInputText('1');
-
-    }
-
-    @FXML
-    void btn2Action(ActionEvent event) {
-        appendToInputText('2');
-    }
-
-    @FXML
-    void btn3Action(ActionEvent event) {
-        appendToInputText('3');
-    }
-
-    @FXML
-    void btn4Action(ActionEvent event) {
-        appendToInputText('4');
-    }
-
-    @FXML
-    void btn5Action(ActionEvent event) {
-        appendToInputText('5');
-    }
-
-    @FXML
-    void btn6Action(ActionEvent event) {
-        appendToInputText('6');
-    }
-
-    @FXML
-    void btn7Action(ActionEvent event) {
-        appendToInputText('7');
-    }
-
-    @FXML
-    void btn8Action(ActionEvent event) {
-        appendToInputText('8');
-    }
-
-    @FXML
-    void btn9Action(ActionEvent event) {
-        appendToInputText('9');
+    void anyButtonAction(ActionEvent event) {
+        txtFieldInput.setText(txtFieldInput.getText() + (((Button) event.getSource()).getText().charAt(0)));
     }
 
     @FXML
     void btnBackSpaceAction(ActionEvent event) {
         txtFieldInput.setText(txtFieldInput.getText().substring(0, txtFieldInput.getText().length() - 1));
     }
-
     @FXML
     void btnCAction(ActionEvent event) {
         txtFieldInput.setText("");
     }
-
     @FXML
     void btnCEAction(ActionEvent event) {
         txtFieldInput.setText("");
         txtAreaClienteLog.setText("");
-    }
-
-    @FXML
-    void btnComaAction(ActionEvent event) {
-        appendToInputText('.');
-    }
-
-    @FXML
-    void btnPlusAction(ActionEvent event) {
-        appendToInputText('+');
-    }
-
-    @FXML
-    void btnMinusAction(ActionEvent event) {
-        appendToInputText('-');
-    }
-
-    @FXML
-    void btnMultiplyAction(ActionEvent event) {
-        appendToInputText('*');
-    }
-
-    @FXML
-    void btnDivideAction(ActionEvent event) {
-        appendToInputText('/');
     }
 
     @FXML

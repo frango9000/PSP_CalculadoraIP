@@ -8,11 +8,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import psp.c_calc2.ui.IServerStatusListener;
 import psp.z_misc.Asserts;
 
@@ -103,11 +105,11 @@ public class Servidor {
                 serverThread.getServerSocket().close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                serverThread = null;
             }
-            serverThread.pool.shutdownNow();
-            serverThread.interrupt();
-            serverThread = null;
         }
+        notifyServerStatusToListeners();
     }
 
     public boolean isServerAlive() {
@@ -116,67 +118,101 @@ public class Servidor {
 
     private class ServerThread extends Thread {
 
+        private boolean active = false;
+
         //        private int maxActiveClients = Runtime.getRuntime().availableProcessors();
         private int maxActiveClients = 4;
-
         private ExecutorService pool = Executors.newFixedThreadPool(maxActiveClients);
         private int activeClients = 0;
+        private List<WorkerThread> boundClients = new ArrayList<>();
 
         private ServerSocket serverSocket = null;
+        private InetSocketAddress inetSocketAddress;
 
         public ServerSocket getServerSocket() {
             return serverSocket;
         }
 
-        private InetSocketAddress inetSocketAddress;
+        public void setActive(boolean active) {
+            this.active = active;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
 
         @Override
         public void run() {
             try {
-
                 log("Creando socket servidor calculadora. Clientes Max: " + maxActiveClients);
-
                 serverSocket = new ServerSocket();
 
-                log("Realizando el bind");
+                inetSocketAddress = (hostname.length() > 6 && InetAddress.getByName(hostname).isReachable(100))
+                                    ? new InetSocketAddress(hostname, port)
+                                    : new InetSocketAddress(InetAddress.getLocalHost(), port);
 
-                if (hostname.length() > 6 && InetAddress.getByName(hostname).isReachable(100)) {
-                    inetSocketAddress = new InetSocketAddress(hostname, port);
-                } else {
-                    inetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost(), port);
-                }
-
+                log("Realizando el bind: " + inetSocketAddress.getAddress() + ":" + inetSocketAddress.getPort());
                 serverSocket.bind(inetSocketAddress);
+                setActive(true);
                 notifyServerStatusToListeners();
                 notifyActiveClientsToListeners(activeClients);
 
                 log("Aceptando conexiones: " + serverSocket.getLocalSocketAddress().toString());
-
-                while (true) {
-                    final Socket clientSocket = serverSocket.accept();
-                    pool.execute(new WorkerThread(clientSocket));
+                while (isActive()) {
+                    Socket clientSocket = serverSocket.accept();
+                    clientSocket.setKeepAlive(true);
+                    WorkerThread workerThread = new WorkerThread(clientSocket);
+                    boundClients.add(workerThread);
+                    pool.execute(workerThread);
                 }
             } catch (BindException be) {
-                log("Unbindable Socket Address" + inetSocketAddress);
+                log("Unbindable Socket Address: " + inetSocketAddress);
             } catch (IllegalArgumentException iae) {
                 log("Puerto Invalido");
+            } catch (SocketException se) {
+                log("Interrumpiendo Bind");
             } catch (UnknownHostException uhe) {
                 log("Hostname invalido");
             } catch (IOException ioe) {
-//                ioe.printStackTrace();
                 log("Deteniendo Servidor");
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
-                log("Cerrando el socket servidor");
-                try {
-                    if (serverSocket != null) {
-                        serverSocket.close();
-                        log("Socket Cerrado");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                killServerThread();
+            }
+        }
+
+        public void killServerThread() {
+            log("Cerrando el socket servidor");
+            try {
+                if (serverSocket != null) {
+                    serverSocket.close();
+                    log("Socket Cerrado");
                 }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } finally {
+                setActive(false);
                 notifyServerStatusToListeners();
                 log("Server Thread Terminado");
+            }
+            boundClients.forEach(workerThread -> workerThread.setActive(false));
+            pool.shutdown(); // Disable new tasks from being submitted
+            try {
+                // Wait a while for existing tasks to terminate
+                if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                    pool.shutdownNow(); // Cancel currently executing tasks
+                    // Wait a while for tasks to respond to being cancelled
+                    if (!pool.awaitTermination(60, TimeUnit.SECONDS))
+                        System.err.println("Pool did not terminate");
+                }
+            } catch (InterruptedException ie) {
+                // (Re-)Cancel if current thread also interrupted
+                pool.shutdownNow();
+                // Preserve interrupt status
+                Thread.currentThread().interrupt();
+            } finally {
+
             }
         }
 
@@ -184,25 +220,39 @@ public class Servidor {
 
             private final Socket clientSocket;
 
+            private boolean active = false;
+
             public WorkerThread(Socket clientSocket) {
                 this.clientSocket = clientSocket;
             }
 
+            public boolean isActive() {
+                return active;
+            }
+
+            public void setActive(boolean active) {
+                this.active = active;
+            }
+
             @Override
             public void run() {
+
+                setActive(true);
                 notifyActiveClientsToListeners(++activeClients);
 
                 String id = clientSocket.getInetAddress() + ":" + clientSocket.getPort() + ": ";
                 log(id + "Conexion iniciada");
+
                 try {
-                    while (clientSocket.isConnected()) {
-                        DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-                        DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+                    DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+                    DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+
+                    while (clientSocket.isConnected() && serverSocket.isBound() && isActive()) {
 
                         log(id + "Enviando señal preparado");
                         out.writeBoolean(true);                                         //O1
 
-                        String expresion = in.readUTF();                                   //I2
+                        String expresion = in.readUTF();                                   //I2 //TODO: Heartbeat
                         log(id + "Expresion recibida: " + expresion);
 
                         try {
@@ -223,14 +273,18 @@ public class Servidor {
                 } catch (IOException e) {
                     log(id + "Cliente deconectado");
                     //e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 } finally {
                     log(id + "Cerrando el socket cliente");
                     try {
                         clientSocket.close();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        notifyActiveClientsToListeners(--activeClients);
+                        boundClients.remove(this);
                     }
-                    notifyActiveClientsToListeners(--activeClients);
                 }
             }
         }
