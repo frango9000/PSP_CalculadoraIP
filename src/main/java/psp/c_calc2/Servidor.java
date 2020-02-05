@@ -182,7 +182,7 @@ public class Servidor {
             }
         }
 
-        public void killServerThread() {
+        public synchronized void killServerThread() {
             log("Cerrando el socket servidor");
             try {
                 if (serverSocket != null) {
@@ -209,10 +209,9 @@ public class Servidor {
             } catch (InterruptedException ie) {
                 // (Re-)Cancel if current thread also interrupted
                 pool.shutdownNow();
+            } finally {
                 // Preserve interrupt status
                 Thread.currentThread().interrupt();
-            } finally {
-
             }
         }
 

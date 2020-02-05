@@ -2,6 +2,7 @@ package psp.c_calc2;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
@@ -190,6 +191,8 @@ public class Cliente extends Thread {
                         out.writeBoolean(true);                                      //O4
                     }
                 }
+            } catch (EOFException eofe) {
+                log("Cliente Desconectado");
             } catch (ConnectException ce) {
                 log("Host no responde");
             } catch (SocketException se) {
@@ -204,7 +207,7 @@ public class Cliente extends Thread {
             }
         }
 
-        public void killClientThread() {
+        public synchronized void killClientThread() {
             try {
                 if (in != null)
                     in.close();
@@ -218,6 +221,7 @@ public class Cliente extends Thread {
             } finally {
                 log("Cliente terminado");
                 notifyClientStatusToListeners();
+                Thread.currentThread().interrupt();
             }
         }
     }

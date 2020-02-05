@@ -35,7 +35,7 @@ public class LauncherControl extends VBox {
     void btnClienteAction(ActionEvent event) {
         try {
             TabPane root = FXMLLoader.load(getClass().getResource("/fxml/ClientPane.fxml"));
-            FxApplication.getMainStage().setScene(new Scene(root));
+            FxApplication.getMainStage().getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class LauncherControl extends VBox {
     void btnServidorAction(ActionEvent event) {
         try {
             VBox root = FXMLLoader.load(getClass().getResource("/fxml/ServerPane.fxml"));
-            FxApplication.getMainStage().setScene(new Scene(root));
+            FxApplication.getMainStage().getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
