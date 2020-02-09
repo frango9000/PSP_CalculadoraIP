@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4c828622-2117-4a86-9e72-4c0288fa3b4f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XO942ske51iVRCjJuZeJRmXKiq" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn -v" />
+      <command value="mvn exec" />
+      <command value="mvn exec:exec" />
+      <command value="mvn exec:java" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Maven.exec">
+    <configuration name="MainUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="psp.c_calc2.ui.MainUI" />
+      <module name="PSP_NetworkSocket2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="psp.c_calc2.ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="exec" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="exec:java" />
+              </list>
+            </option>
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.MainUI" />
+      <item itemvalue="Maven.exec" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainUI" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4c828622-2117-4a86-9e72-4c0288fa3b4f" name="Default Changelist" comment="" />
+      <created>1580906078595</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580906078595</updated>
+      <workItem from="1580906081272" duration="1487000" />
+      <workItem from="1581075171173" duration="1259000" />
+      <workItem from="1581274674091" duration="1712000" />
+    </task>
+    <task id="LOCAL-00001" summary="Catch Cliente Disconnect">
+      <created>1580914909849</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1580914909849</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Catch Cliente Disconnect" />
+    <option name="LAST_COMMIT_MESSAGE" value="Catch Cliente Disconnect" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="287" y="69" key="#PSP_NetworkSocket_[clean]" timestamp="1581275781980">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="287" y="69" key="#PSP_NetworkSocket_[clean]/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275781980" />
+    <state x="414" y="176" width="1092" height="775" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581275811206">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="176" width="1092" height="775" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275811206" />
+    <state x="779" y="212" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog" timestamp="1581275616448">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="779" y="212" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275616448" />
+    <state x="541" y="115" key="CommitChangelistDialog2" timestamp="1580914908441">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="541" y="115" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1580914908441" />
+    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1581275431834">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275431834" />
+    <state width="1877" height="208" key="GridCell.Tab.0.bottom" timestamp="1581276313653">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581276313653" />
+    <state width="1877" height="208" key="GridCell.Tab.0.center" timestamp="1581276313652">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581276313652" />
+    <state width="1877" height="208" key="GridCell.Tab.0.left" timestamp="1581276313652">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581276313652" />
+    <state width="1877" height="208" key="GridCell.Tab.0.right" timestamp="1581276313653">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581276313653" />
+    <state x="461" y="163" key="SettingsEditor" timestamp="1581275425310">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275425310" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1580914913386">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1580914913386" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1581274704187">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581274704187" />
+    <state x="342" y="141" key="new project wizard" timestamp="1581075833424">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="141" key="new project wizard/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581075833424" />
+    <state x="616" y="240" width="672" height="677" key="run.anything.popup" timestamp="1581275568117">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" width="672" height="677" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1581275568117" />
+  </component>
+</project>
