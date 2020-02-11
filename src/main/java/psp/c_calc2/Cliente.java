@@ -23,7 +23,7 @@ public class Cliente extends Thread {
 
     public static Cliente getInstance() {
         if (instance == null) {
-            synchronized (Servidor.class) {
+            synchronized (Cliente.class) {
                 if (instance == null) {
                     instance = new Cliente();
                 }
